@@ -1,0 +1,30 @@
+
+
+{
+    "player.png": {
+        "sprite_sheet": {
+            "rows": 1,
+            "columns": 3,
+            "size": 16,
+            "bound": false
+        },
+        "convert_alpha": true,
+        "states": ["level"]
+    },
+    "tile_set.png": {
+        "sprite_sheet": {
+            "rows": 1,
+            "columns": 2,
+            "size": 16,
+            "bound": false
+        },
+        "convert_alpha": false,
+        "states": ["level"] 
+    },
+    "sword.png": {
+        "sprite_sheet": null,
+        "convert_alpha": true,
+        "states": ["level"]
+    }
+}
+
