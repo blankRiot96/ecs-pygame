@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Tuple, Union
 import pygame
 from pygame import Vector2 as Vec
 
-Pos = Union[Tuple[int, int], List[int], pygame.Vector2, Vec]
+Pos = Union[Tuple[int, int], List[int], pygame.Vector2]
 Size = Tuple[int, int]
 RgbaOutput = Tuple[int, int, int, int]
 ColorValue = Union[
