@@ -24,15 +24,17 @@ class Pos(Vec):
 
 
 @component
-class Image:
-    image: pygame.Surface
-    screen: pygame.Surface
+class Frames:
+    animation: Animation
 
 
 @component
-class Frames:
+class Skeleton:
     animation: Animation
-    screen: pygame.Surface
+    rect: pygame.Rect
+    pos: Vec
+    hp: int
+    speed: float
 
 
 @component

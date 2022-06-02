@@ -7,14 +7,18 @@ import math
 
 import esper
 import pygame
+import logging
 
-from game.components import (CollisionTile, Frames, Image, Movement,
+from game.components import (CollisionTile, Frames, Movement,
                              PlayerData, Pos, Rectangle, Sword, Tile)
 from game.generics import EventInfo
 from game.utils import get_movement
 
 
-class MovementProcessor(esper.Processor):
+logger = logging.getLogger()
+
+
+class InputProcessor(esper.Processor):
     def process(self, event_info: EventInfo):
         dt = event_info["dt"]
         keys = event_info["keys"]
@@ -72,7 +76,7 @@ class MovementProcessor(esper.Processor):
 
 
 class CollisionProcessor(esper.Processor):
-    def process(self):
+    def process(self, event_info: EventInfo):
         for entity, (pos, movement, rect) in self.world.get_components(
             Pos, Movement, Rectangle
         ):
@@ -88,26 +92,30 @@ class CollisionProcessor(esper.Processor):
                 ):
                     movement.y = 0
 
+            rect.midbottom = pos + movement
+
+
+class MovementProcessor(esper.Processor):
+    def process(self, event_info: EventInfo):
+        for entity, (pos, movement) in self.world.get_components(Pos, Movement):
             pos += movement
-            rect.midbottom = pos
 
 
 class RenderProcessor(esper.Processor):
-    def process(self, screen: pygame.Surface, dt: float):
+    def process(self, event_info: EventInfo):
+        screen = event_info["screen"]
+        dt = event_info["dt"]
         for entity, (tile, *_) in self.world.get_components(Tile):
             screen.blit(tile.image, tile.pos)
 
         for entity, (tile, *_) in self.world.get_components(CollisionTile):
             screen.blit(tile.image, tile.rect)
 
-        for entity, (image, pos) in self.world.get_components(Image, Pos):
-            image.screen.blit(image.image, pos)
-
         for entity, (frames, pos, rect) in self.world.get_components(
             Frames, Pos, Rectangle
         ):
             frames.animation.update(dt)
-            frames.animation.draw(frames.screen, pos, blit_by="midbottom")
+            frames.animation.draw(screen, pos, blit_by="midbottom")
 
         for entity, (sword, *_) in self.world.get_components(Sword):
             screen.blit(sword.image, sword.rect)

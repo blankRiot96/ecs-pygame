@@ -12,7 +12,7 @@ import pygame
 from game.components import Frames, Movement, PlayerData, Pos, Rectangle, Sword
 from game.enums import GameStates
 from game.generics import EventInfo
-from game.processors import (CollisionProcessor, MovementProcessor,
+from game.processors import (InputProcessor, CollisionProcessor, MovementProcessor,
                              RenderProcessor)
 from game.states import Level
 from game.utils.animation import Animation
@@ -68,18 +68,22 @@ class Game:
                 Rectangle((70, 50), self.assets["player"][0].get_size()),
                 PlayerData(speed=0.7),
                 Frames(
-                    Animation(self.assets["player"], speed=0.05), self.screen
+                    Animation(self.assets["player"], speed=0.05)
                 ),
                 Sword(
                     image=self.assets["sword"].copy(),
                     pos=Pos(70, 50),
                 ),
             )
+            self.skeletons = []
+
+            self.input_processor = InputProcessor()
             self.movement_processor = MovementProcessor()
             self.collision_processor = CollisionProcessor()
             self.render_processor = RenderProcessor()
-            self.world.add_processor(self.movement_processor, priority=2)
-            self.world.add_processor(self.collision_processor, priority=1)
+            self.world.add_processor(self.input_processor, priority=3)
+            self.world.add_processor(self.collision_processor, priority=2)
+            self.world.add_processor(self.movement_processor, priority=1)
             self.world.add_processor(self.render_processor)
 
             self.current_state = Level(self.world, self.player)
@@ -87,13 +91,6 @@ class Game:
             pass
         else:
             raise ValueError(f"No such state '{self.state}' exists!")
-
-    def selective_process(self, event_info: EventInfo):
-        if self.state == GameStates.LEVEL:
-            self.current_state.update(event_info["dt"])
-            self.movement_processor.process(event_info)
-            self.collision_processor.process()
-            self.render_processor.process(self.screen, event_info["dt"])
 
     def process(self):
 
@@ -104,6 +101,7 @@ class Game:
             mouse_pos = pygame.mouse.get_pos()
 
             event_info = {
+                "screen": self.screen,
                 "dt": dt,
                 "raw dt": raw_dt,
                 "keys": keys,
@@ -116,7 +114,7 @@ class Game:
 
             self.screen.fill((25, 25, 25))
 
-            self.selective_process(event_info)
+            self.world.process(event_info)
 
             raw_dt = self.clock.tick(self.CAP_FPS) / 1000
             dt = raw_dt * self.CAP_FPS

@@ -25,6 +25,16 @@
         "sprite_sheet": null,
         "convert_alpha": true,
         "states": ["level"]
+    },
+    "skeleton.png": {
+        "sprite_sheet": {
+            "rows": 1,
+            "columns": 4,
+            "size": 32,
+            "bound": false
+        },
+        "convert_alpha": true,
+        "states": ["level"]
     }
 }
 
