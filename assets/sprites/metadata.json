@@ -14,7 +14,7 @@
     "tile_set.png": {
         "sprite_sheet": {
             "rows": 1,
-            "columns": 2,
+            "columns": 3,
             "size": 16,
             "bound": false
         },

@@ -12,7 +12,8 @@ import pygame
 from game.components import Frames, Movement, PlayerData, Pos, Rectangle, Sword
 from game.enums import GameStates
 from game.generics import EventInfo
-from game.processors import (InputProcessor, CollisionProcessor, MovementProcessor,
+from game.processors import (CollisionProcessor, EntityProcessor,
+                             InputProcessor, MovementProcessor,
                              RenderProcessor)
 from game.states import Level
 from game.utils.animation import Animation
@@ -68,19 +69,21 @@ class Game:
                 Rectangle((70, 50), self.assets["player"][0].get_size()),
                 PlayerData(speed=0.7),
                 Frames(
-                    Animation(self.assets["player"], speed=0.05)
+                    Animation(self.assets["player"], speed=0.05),
+                    blit_by="midbottom",
                 ),
                 Sword(
                     image=self.assets["sword"].copy(),
                     pos=Pos(70, 50),
                 ),
             )
-            self.skeletons = []
 
+            self.entity_processor = EntityProcessor(self.assets)
             self.input_processor = InputProcessor()
             self.movement_processor = MovementProcessor()
             self.collision_processor = CollisionProcessor()
             self.render_processor = RenderProcessor()
+            self.world.add_processor(self.entity_processor, priority=4)
             self.world.add_processor(self.input_processor, priority=3)
             self.world.add_processor(self.collision_processor, priority=2)
             self.world.add_processor(self.movement_processor, priority=1)

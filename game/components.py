@@ -9,6 +9,7 @@ import pygame
 
 from game.generics import Vec
 from game.utils.animation import Animation
+from game.utils.classes import Time
 
 
 class Rectangle(pygame.Rect):
@@ -26,13 +27,11 @@ class Pos(Vec):
 @component
 class Frames:
     animation: Animation
+    blit_by: str
 
 
 @component
 class Skeleton:
-    animation: Animation
-    rect: pygame.Rect
-    pos: Vec
     hp: int
     speed: float
 
@@ -67,3 +66,12 @@ class Tile:
 class CollisionTile:
     image: pygame.Surface
     rect: pygame.Rect
+
+
+class SkeletonSpawnerTile:
+    SKELETON_GEN_TIME = 8.3
+
+    def __init__(self, image: pygame.Surface, pos: tuple):
+        self.image = image
+        self.pos = pos
+        self.gen_timer = Time(self.SKELETON_GEN_TIME)

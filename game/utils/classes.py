@@ -4,6 +4,7 @@ The source code is distributed under the MIT license.
 """
 
 import pygame
+import time
 
 
 class Glow:
