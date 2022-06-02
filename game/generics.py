@@ -6,6 +6,7 @@ The source code is distributed under the MIT license.
 from typing import Any, Dict, List, Tuple, Union
 
 import pygame
+from pygame import Vector2 as Vec
 
 Pos = Union[Tuple[int, int], List[int], pygame.Vector2]
 Size = Tuple[int, int]
