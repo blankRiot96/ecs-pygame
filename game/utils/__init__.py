@@ -3,9 +3,10 @@ This file is a part of the 'ecs-pygame' source code.
 The source code is distributed under the MIT license.
 """
 
+import math
+
 import game.utils.animation
 import game.utils.sprites
-import math
 
 
 def get_movement(angle: float, speed) -> tuple[int, int]:
@@ -19,4 +20,3 @@ def get_movement(angle: float, speed) -> tuple[int, int]:
     dy = math.sin(angle) * speed
 
     return dx, dy
-

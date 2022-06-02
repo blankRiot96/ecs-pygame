@@ -10,5 +10,4 @@ class Level:
         self.player = player
 
     def update(self, dt):
-        # self.world.component_for_entity(self.player, DeltaTime).time = dt
         pass

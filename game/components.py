@@ -6,8 +6,8 @@ The source code is distributed under the MIT license.
 from dataclasses import dataclass as component
 
 import pygame
-from game.generics import Vec
 
+from game.generics import Vec
 from game.utils.animation import Animation
 
 
@@ -48,7 +48,8 @@ class Sword:
         self.image = image.copy()
         self.original_image = image.copy()
         self.pos = pos
-        self.rect = image.get_bounding_rect(midbottom=pos)
+        self.rect = image.get_bounding_rect()
+        self.rect.midbottom = pos
         self.distance = 0
         self.piercing = False
         self.angle = 0

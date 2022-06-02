@@ -44,7 +44,6 @@ def load_assets(state: str, screen: pygame.Surface) -> dict:
 
     json_files = path.rglob("*.json")
     total_files = len(tuple(json_files))
-    print(total_files)
     loading_back_rect = pygame.Rect(0, 0, 800, 50)
     loading_fore_rect = pygame.Rect(0, 0, 0, 50)
     total_rect_width = loading_back_rect.width

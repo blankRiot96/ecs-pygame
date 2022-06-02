@@ -15,12 +15,6 @@ from game.utils import get_movement
 
 
 class MovementProcessor(esper.Processor):
-    def __init__(self):
-        self.going_towards = False 
-        self.max_distance = 50
-        self.distance = 0
-        self.target = None 
-
     def process(self, event_info: EventInfo):
         dt = event_info["dt"]
         keys = event_info["keys"]
@@ -30,7 +24,6 @@ class MovementProcessor(esper.Processor):
         for event in event_info["events"]:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
-                self.going_towards = True
 
         for entity, (
             pos,
@@ -47,29 +40,33 @@ class MovementProcessor(esper.Processor):
                 movement.x += player_data.speed * dt
             if keys[pygame.K_a]:
                 movement.x -= player_data.speed * dt
-            if not self.going_towards:
+
+            if clicked:
+                sword.piercing = True
+
+            if not sword.piercing:
                 sword.pos = pos.copy()
-            self.target = pos.copy()
-            angle = (
-                math.degrees(
-                    math.atan2(
-                        mouse_pos[1] - sword.pos.y,
-                        mouse_pos[0] - sword.pos.x,
-                    )
+
+            angle = math.degrees(
+                math.atan2(
+                    mouse_pos[1] - sword.pos.y,
+                    mouse_pos[0] - sword.pos.x,
                 )
             )
             sword.image = pygame.transform.rotate(sword.original_image, -angle)
 
-            if self.going_towards:
-                if self.distance < self.max_distance:
-                    dx, dy = get_movement(angle, sword.pierce_speed)
-                    sword.pos.x += dx * dt 
+            if sword.piercing:
+                if sword.distance < sword.MAX_DISTANCE:
+                    dx, dy = get_movement(angle, sword.PIERCING_SPEED)
+                    sword.pos.x += dx * dt
                     sword.pos.y += dy * dt
 
-                    self.distance += math.sqrt(((dx * dt) ** 2) + ((dy * dt) ** 2))
+                    sword.distance += math.sqrt(
+                        ((dx * dt) ** 2) + ((dy * dt) ** 2)
+                    )
                 else:
-                    self.going_towards = False
-                    self.distance = 0
+                    sword.piercing = False
+                    sword.distance = 0
 
             sword.rect.midbottom = sword.pos
 

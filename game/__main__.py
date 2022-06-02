@@ -4,6 +4,7 @@ The source code is distributed under the MIT license.
 """
 
 import json
+import logging
 
 import esper
 import pygame
@@ -18,6 +19,8 @@ from game.utils.animation import Animation
 from game.utils.maps import load_map
 from game.utils.sprites import load_assets
 
+logger = logging.getLogger()
+
 
 class Game:
     """
@@ -29,6 +32,8 @@ class Game:
     TILE_SIZE = 16
 
     def __init__(self):
+        self.logging_config()
+
         self.world = esper.World()
         self.screen = pygame.display.set_mode(self.DISPLAY_RES, pygame.SCALED)
         pygame.init()
@@ -43,6 +48,10 @@ class Game:
         self.selective_load()
 
         self.clock = pygame.time.Clock()
+
+    def logging_config(self):
+        logging.basicConfig()
+        logger.setLevel("INFO")
 
     def selective_load(self):
         """
@@ -99,7 +108,7 @@ class Game:
                 "raw dt": raw_dt,
                 "keys": keys,
                 "mouse pos": mouse_pos,
-                "events": events
+                "events": events,
             }
             for event in events:
                 if event.type == pygame.QUIT:
