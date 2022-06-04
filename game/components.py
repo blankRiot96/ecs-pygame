@@ -64,7 +64,6 @@ class Tile:
 
 @component
 class CollisionTile:
-    image: pygame.Surface
     rect: pygame.Rect
 
 

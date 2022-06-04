@@ -172,9 +172,6 @@ class RenderProcessor(esper.Processor):
         for entity, (tile, *_) in self.world.get_components(Tile):
             screen.blit(tile.image, tile.pos)
 
-        for entity, (tile, *_) in self.world.get_components(CollisionTile):
-            screen.blit(tile.image, tile.rect)
-
         for entity, (frames, pos) in self.world.get_components(Frames, Pos):
             frames.animation.update(dt)
             frames.animation.draw(screen, pos, blit_by=frames.blit_by)

@@ -24,7 +24,11 @@ def load_map(
             if col == ".":
                 tile = Tile(image, rect.topleft)
             elif col == "x":
-                tile = CollisionTile(image, rect)
+                tile = CollisionTile(rect)
+                world.create_entity(tile, Tile(image, rect.topleft))
+                continue
             elif col == "s":
                 tile = SkeletonSpawnerTile(image, rect.topleft)
+                world.create_entity(tile, Tile(image, rect.topleft))
+                continue
             world.create_entity(tile)
