@@ -24,7 +24,7 @@ logger = logging.getLogger()
 class EntityProcessor(esper.Processor):
     def __init__(self, assets: Assets):
         self.assets = assets
-        self.skeleton_gen_count = random.randrange(2, 6)
+        self.skeleton_gen_count = random.randrange(1, 3)
 
     def spawn_skeletons(self, event_info: EventInfo):
         for entity, (tile, *_) in self.world.get_components(
@@ -39,15 +39,15 @@ class EntityProcessor(esper.Processor):
                     skeleton_rect = Rectangle(
                         self.assets["skeleton"][0].get_bounding_rect()
                     )
-                    skeleton = Skeleton(50, random.uniform(0.3, 0.5))
+                    skeleton = Skeleton(50, random.uniform(0.1, 0.25))
                     self.world.create_entity(
                         skeleton,
                         frames_component,
                         Pos(tile.pos),
                         skeleton_rect,
-                        Movement(0, 0)
+                        Movement(0, 0),
                     )
-                    self.skeleton_gen_count = random.randrange(2, 6)
+                    self.skeleton_gen_count = random.randrange(1, 3)
 
     def process(self, event_info: EventInfo):
         self.spawn_skeletons(event_info)
@@ -114,11 +114,11 @@ class InputProcessor(esper.Processor):
             sword.rect.midbottom = sword.pos
 
     def skeleton_input_handler(self, dt):
-        for entity, (skeleton, movement) in self.world.get_components(Skeleton, Movement):
-            movement.x, movement.y = 0, 0
-            movement.move_towards(
-                self.player_pos, skeleton.speed * dt
-            )
+        for entity, (skeleton, movement, pos) in self.world.get_components(
+            Skeleton, Movement, Pos
+        ):
+            angle = math.atan2(self.player_pos.y - pos.y, self.player_pos.x - pos.x)
+            movement.x, movement.y = get_movement(angle, skeleton.speed * dt)
 
     def process(self, event_info: EventInfo):
         dt = event_info["dt"]

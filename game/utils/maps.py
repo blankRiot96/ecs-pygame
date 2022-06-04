@@ -6,7 +6,7 @@ The source code is distributed under the MIT license.
 import esper
 import pygame
 
-from game.components import CollisionTile, Tile, SkeletonSpawnerTile
+from game.components import CollisionTile, SkeletonSpawnerTile, Tile
 from game.generics import Assets
 
 

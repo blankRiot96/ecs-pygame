@@ -3,8 +3,9 @@ This file is a part of the 'ecs-pygame' source code.
 The source code is distributed under the MIT license.
 """
 
-import pygame
 import time
+
+import pygame
 
 
 class Glow:
